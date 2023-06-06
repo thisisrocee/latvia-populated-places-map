@@ -1,0 +1,1 @@
+# latvia-populated-places-map
