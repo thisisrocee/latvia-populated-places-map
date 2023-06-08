@@ -60,19 +60,6 @@ public class ParseController : ControllerBase
             }
         }
 
-        var westFurthestPlace = parsedDataList.OrderBy(data => data.Longitude).ToList();
-        var eastFurthestPlace = parsedDataList.OrderByDescending(data => data.Longitude).ToList();
-        var southFurthestPlace = parsedDataList.OrderBy(data => data.Latitude).ToList();
-        var northFurthestPlace = parsedDataList.OrderByDescending(data => data.Latitude).ToList();
-
-        var result = new List<ParsedData>
-        {
-            westFurthestPlace[0],
-            eastFurthestPlace[1],
-            southFurthestPlace[0],
-            northFurthestPlace[1]
-        };
-
-        return Ok(result);
+        return Ok(parsedDataList);
     }
 }
