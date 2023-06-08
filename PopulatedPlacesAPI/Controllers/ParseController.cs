@@ -6,7 +6,7 @@ namespace PopulatedPlacesAPI.Controllers;
 
 [ApiController]
 [Route("api")]
-public class WeatherForecastController : ControllerBase
+public class ParseController : ControllerBase
 {
     [HttpGet]
     public IActionResult Get()
