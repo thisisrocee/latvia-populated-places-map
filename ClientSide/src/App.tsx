@@ -1,99 +1,85 @@
-import { Autocomplete, TextField } from "@mui/material";
-import axios from "axios";
-import React, { useEffect, useState } from "react";
-import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
-
-type Details = {
-  name: string;
-  latitude: string;
-  longitude: string;
-};
-
-function sortObjectsByValue(
-  objects: Details[],
-  valueKey: keyof Details
-): Details[] {
-  return [...objects].sort((a, b) => a[valueKey].localeCompare(b[valueKey]));
-}
+import { useEffect, useState } from "react";
+import { Details } from "./types/details";
+import { fetchAllPoints } from "./api/api";
+import { filterPointsByName } from "./utils/filterPointsByName";
+import { sortPointsByValue } from "./utils/sortPointsByValue";
+import Map from "./components/Map";
+import SearchButton from "./components/SearchButton";
+import AutocompleteBox from "./components/AutoCompleteBox";
+import parse from "autosuggest-highlight/parse";
+import match from "autosuggest-highlight/match";
 
 function App() {
   const [allPoints, setAllPoints] = useState<Details[]>([]);
+  const [value, setValue] = useState<string | null>(null);
+  const [showAutocomplete, setShowAutocomplete] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
-      try {
-        const { data } = await axios.get("http://localhost:5038/api");
-        setAllPoints(data);
-        console.log(data);
-      } catch (error) {
-        console.log(error);
-      }
+      const data = await fetchAllPoints();
+      setAllPoints(data);
     };
 
     fetchData();
   }, []);
 
-  const sortedByLatitude = sortObjectsByValue(allPoints, "latitude")
-  .slice(0, 1);
-  const sortedRevByLatitude = sortObjectsByValue(allPoints, "latitude")
-  .reverse().slice(1, 2);
-  const sortedByLongitude = sortObjectsByValue(allPoints, "longitude")
-  .slice(0, 1);
-  const sortedRevByLongitude = sortObjectsByValue(allPoints, "longitude")
-  .reverse().
-  slice(1, 2);
-  const sortedByName = sortObjectsByValue(allPoints, "name");
+  const sortedByLatitude = sortPointsByValue(allPoints, "latitude").slice(0,1);
+  const sortedRevByLatitde = sortPointsByValue(allPoints, "latitude").reverse().slice(1,2);
+  const sortedByLongitude = sortPointsByValue(allPoints, "longitude").slice(0,1);
+  const sortedRevByLongitude = sortPointsByValue(allPoints, "longitude").reverse().slice(1,2);
 
   const result = [
     ...sortedByLatitude,
-    ...sortedRevByLatitude,
+    ...sortedRevByLatitde,
     ...sortedByLongitude,
     ...sortedRevByLongitude,
-  ];
+  ]
 
-  const generateMarkers = (): React.ReactNode => {
-    return result.map((point): React.ReactNode => {
-      return (
-        <>
-          <Marker
-            key={point.name}
-            position={[parseFloat(point.latitude), parseFloat(point.longitude)]}
-          >
-            <Popup>{point.name}</Popup>
-          </Marker>
-          ;
-        </>
-      );
-    });
+  const sortedByName = sortPointsByValue(allPoints, "name");
+  const filteredPoints = value ? filterPointsByName(allPoints, value) : [];
+
+  const handleAutocompleteChange = (newValue: string | null) => {
+    setValue(newValue);
   };
 
-  const top100Films: string[] = [];
-
-  sortedByName.forEach((element) => {
-    top100Films.push(element.name);
-  });
+  const handleSearchClick = () => {
+    setShowAutocomplete((prev) => !prev);
+  };
 
   return (
     <div>
-      <MapContainer
-        center={[56.946285, 24.105078]}
-        zoom={8}
-        scrollWheelZoom={true}
-        className="relative z-0 h-screen"
-      >
-        <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-        {generateMarkers()}
-      </MapContainer>
-      <Autocomplete
-      disablePortal
-      id="search-box"
-      options={top100Films}
-      className="z-1 w-1/4 absolute top-10 align-center
-      left-20 bg-white border border-gray-300 rounded-md
-      shadow-sm px-4 py-2 text-sm focus:outline-none focus:ring-1
-      focus:ring-blue-500 focus:border-blue-500"
-      renderInput={(params) => <TextField {...params} label="Place" />}
-    />
+      <Map points={result} filteredPoints={filteredPoints} />
+
+      <SearchButton showAutocomplete={showAutocomplete} onClick={handleSearchClick} />
+
+      {showAutocomplete && (
+        <AutocompleteBox
+          options={sortedByName.map((option) => option.name)}
+          value={value}
+          onChange={handleAutocompleteChange}
+          renderOption={(props, option, { inputValue }) => {
+            const matches = match(option, inputValue, { insideWords: true });
+            const parts = parse(option, matches);
+
+            return (
+              <li {...props}>
+                <div>
+                  {parts.map((part, index) => (
+                    <span
+                      key={index}
+                      style={{
+                        fontWeight: part.highlight ? 700 : 400,
+                      }}
+                    >
+                      {part.text}
+                    </span>
+                  ))}
+                </div>
+              </li>
+            );
+          }}
+        />
+      )}
     </div>
   );
 }
