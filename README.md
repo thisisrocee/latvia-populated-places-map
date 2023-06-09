@@ -65,4 +65,4 @@ This project utilizes the following dependencies:
 - **React** - JavaScript library for building user interfaces.
 - **Tailwind CSS** - Utility-first CSS framework.
 - **Vite** - Build tool for modern web applications.
-
+- **ASP.NET** - Framework for API.
