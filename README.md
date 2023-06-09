@@ -57,3 +57,12 @@ Open the .env file and set the VITE_API_URL variable to the URL of the backend A
 To build the production-ready optimized version of the React application, run the following command:
 
         npm run dev
+
+## Dependencies
+
+This project utilizes the following dependencies:
+
+- **React** - JavaScript library for building user interfaces.
+- **Tailwind CSS** - Utility-first CSS framework.
+- **Vite** - Build tool for modern web applications.
+
