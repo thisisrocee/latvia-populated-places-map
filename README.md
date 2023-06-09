@@ -17,7 +17,7 @@ To get started with the Populated Places API, follow these steps:
 1. Clone the repository:
 
     ```bash
-    git clone https://github.com/your-username/populated-places-api.git
+    git clone https://github.com/thisisrocee/populated-places-api.git
     
 2. Open Solution
 
@@ -34,7 +34,7 @@ The API should now be running locally at http://localhost:5038 (or https://local
 
 ## FrontEnd
 
-The React frontend consumes the API provided by the C# backend and displays the parsed populated places data on a map with search functionality.
+The React frontend communicates with the API provided by the Backend and displays the parsed populated places data on a map with search functionality.
 
 ## Setup and Run
 
@@ -48,11 +48,12 @@ The React frontend consumes the API provided by the C# backend and displays the 
         
 3. Set the API URL:
 
-Open the .env file and set the REACT_APP_API_URL variable to the URL of the backend API:
+Open the .env file and set the VITE_API_URL variable to the URL of the backend API:
 
-        REACT_APP_API_URL=https://localhost:5038/api
+        VITE_API_URL=https://localhost:5038/api
         
 4. Build
+
 To build the production-ready optimized version of the React application, run the following command:
 
         npm run dev
