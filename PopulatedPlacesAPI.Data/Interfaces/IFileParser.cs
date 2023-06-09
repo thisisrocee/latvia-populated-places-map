@@ -2,8 +2,8 @@
 
 namespace PopulatedPlacesAPI.Data.Interfaces
 {
-    public interface ICsvParser
+    public interface IFileParser
     {
-        List<ParsedData> ParseCSVFile(string csvFilePath);
+        List<LocationData> GetLocationData(string csvFilePath);
     }
 }

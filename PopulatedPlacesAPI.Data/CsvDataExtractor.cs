@@ -3,7 +3,7 @@ using PopulatedPlacesAPI.Data.Interfaces;
 
 namespace PopulatedPlacesAPI.Data;
 
-public class DataExtractor : IDataExtractor
+public class CsvDataExtractor : IDataExtractor
 {
     public string ExtractCSVFile(string directory)
     {

@@ -3,11 +3,11 @@ using PopulatedPlacesAPI.Data.Interfaces;
 
 namespace PopulatedPlacesAPI.Data;
 
-public class CsvParser : ICsvParser
+public class CsvParser : IFileParser
 {
-    public List<ParsedData> ParseCSVFile(string csvFilePath)
+    public List<LocationData> GetLocationData(string csvFilePath)
     {
-        var parsedDataList = new List<ParsedData>();
+        var locationDataList = new List<LocationData>();
 
         using (var reader = new StreamReader(csvFilePath))
         {
@@ -22,15 +22,15 @@ public class CsvParser : ICsvParser
                     fields[i] = fields[i].Replace("#", "").Trim();
                 }
 
-                var parsedData = new ParsedData();
-                parsedData.Name = fields[2];
-                parsedData.Latitude = fields[8];
-                parsedData.Longitude = fields[9];
+                var locationData = new LocationData();
+                locationData.Name = fields[2];
+                locationData.Latitude = fields[8];
+                locationData.Longitude = fields[9];
 
-                parsedDataList.Add(parsedData);
+                locationDataList.Add(locationData);
             }
         }
 
-        return parsedDataList;
+        return locationDataList;
     }
 }

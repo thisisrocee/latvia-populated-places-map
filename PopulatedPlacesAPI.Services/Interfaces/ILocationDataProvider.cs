@@ -2,8 +2,8 @@
 
 namespace PopulatedPlacesAPI.Services.Interfaces
 {
-    public interface IParsingService
+    public interface ILocationDataProvider
     {
-        List<ParsedData> ParseData();
+        List<LocationData> GetLocationDataCollection();
     }
 }

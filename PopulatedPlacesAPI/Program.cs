@@ -9,10 +9,10 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddScoped<IParsingService, ParsingService>();
-builder.Services.AddScoped<ICsvParser, CsvParser>();
-builder.Services.AddScoped<IDataDownloader, DataDownloader>();
-builder.Services.AddScoped<IDataExtractor, DataExtractor>();
+builder.Services.AddScoped<ILocationDataProvider, PopulatedPlacesAPI.Services.LocationDataProvider>();
+builder.Services.AddScoped<IFileParser, CsvParser>();
+builder.Services.AddScoped<IDataDownloader, PopulatedPlacesAPI.Data.LocationDataProvider>();
+builder.Services.AddScoped<IDataExtractor, CsvDataExtractor>();
 
 builder.Services.AddHttpContextAccessor();
 

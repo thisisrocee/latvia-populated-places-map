@@ -7,9 +7,9 @@ namespace PopulatedPlacesAPI.Web.Controllers;
 [Route("api")]
 public class ParseController : ControllerBase
 {
-    private readonly IParsingService _parsingService;
+    private readonly ILocationDataProvider _parsingService;
 
-    public ParseController(IParsingService parsingService)
+    public ParseController(ILocationDataProvider parsingService)
     {
         _parsingService = parsingService;
     }
@@ -17,7 +17,7 @@ public class ParseController : ControllerBase
     [HttpGet]
     public IActionResult Get()
     {
-        var parsedDataList = _parsingService.ParseData();
+        var parsedDataList = _parsingService.GetLocationDataCollection();
         return Ok(parsedDataList);
     }
 }
